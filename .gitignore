@@ -1,0 +1,16 @@
+db/
+incremental_db/
+output_files/
+unsaved/
+*/synthesis/
+*.sof
+*.pof
+*.rpt
+*.smsg
+*.sopcinfo
+*.qws
+__pycache__/
+*.pyc
+.vscode/
+.DS_Store
+_tmp.tcl
