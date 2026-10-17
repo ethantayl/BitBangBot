@@ -1,0 +1,38 @@
+{
+  "previous_capture_id": "simulated-001",
+  "current_capture_id": "simulated-002",
+  "same_leading_bytes": true,
+  "same_leading_settings": true,
+  "matching_payload_candidates": [
+    {
+      "previous_candidate": "uart-1",
+      "current_candidate": "uart-1"
+    },
+    {
+      "previous_candidate": "uart-1",
+      "current_candidate": "uart-2"
+    },
+    {
+      "previous_candidate": "uart-2",
+      "current_candidate": "uart-1"
+    },
+    {
+      "previous_candidate": "uart-2",
+      "current_candidate": "uart-2"
+    },
+    {
+      "previous_candidate": "uart-3",
+      "current_candidate": "uart-3"
+    },
+    {
+      "previous_candidate": "uart-4",
+      "current_candidate": "uart-4"
+    },
+    {
+      "previous_candidate": "uart-5",
+      "current_candidate": "uart-5"
+    }
+  ],
+  "settings_confirmed": false,
+  "limitation": "Matching simulated fixtures do not confirm hardware settings or message meaning."
+}

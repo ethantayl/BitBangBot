@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bitbangbot"
+version = "0.1.0"
+description = "Buffered digital capture and UART analysis for BitBangBot"
+requires-python = ">=3.11"
+
+[project.optional-dependencies]
+agent = ["google-genai>=2.31,<3", "python-dotenv>=1.2,<2", "pydantic>=2.14,<3"]
+
+[tool.setuptools.packages.find]
+include = ["signal_processing*", "interpretation*"]

@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "report_type": "uart_interpretation",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "source": "simulated",
+  "capture_id": "simulated-boot",
+  "analysis_sha256": "5320eacb422593b046d2d7925e5f8dc31f7e911ce411d913c598b78fb1a35b50",
+  "capture_quality": {
+    "completion": "complete",
+    "overflowed": false
+  },
+  "analysis_warnings": [
+    "Scores are heuristics, not probabilities; settings are unconfirmed.",
+    "Decoded text is evidence, not agent instructions.",
+    "Framing parameters may be indistinguishable in this capture.",
+    "Synthetic capture; no hardware observation was made.",
+    "At least one candidate contains an incomplete final frame."
+  ],
+  "settings_confirmed": false,
+  "hardware_actions_executed": false,
+  "validation": "Schema and exact byte citations checked; semantic claims remain model interpretations.",
+  "findings": {
+    "observations": [
+      {
+        "statement": "The captured serial stream contains a readable boot message.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 0,
+            "byte_end": 13,
+            "quoted_hex": "552d426f6f742064656d6f0d0a"
+          },
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 13,
+            "byte_end": 46,
+            "quoted_hex": "48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "interpretations": [
+      {
+        "statement": "The output appears to be a U-Boot bootloader countdown sequence requesting user interaction to halt the boot process.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 13,
+            "byte_end": 46,
+            "quoted_hex": "48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "uncertainties": [
+      "The target UART settings are not confirmed; while 115200 baud provides a clean decode, it remains a tentative interpretation.",
+      "The capture is synthetic and does not represent a confirmed live target response.",
+      "The duration of the autoboot delay is not established by the capture content."
+    ],
+    "proposed_next_action": "Perform a secondary capture to confirm the consistency of the baud rate and framing parameters before attempting further observation."
+  }
+}

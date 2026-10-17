@@ -1,0 +1,67 @@
+{
+  "schema_version": 2,
+  "report_type": "uart_interpretation",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "source": "simulated",
+  "capture_id": "simulated-001",
+  "analysis_sha256": "d8fd64ca49a805146c69a8f73ce06edfae406993cbf056bed8971af6288c1f18",
+  "capture_quality": {
+    "completion": "complete",
+    "overflowed": false
+  },
+  "analysis_warnings": [
+    "Scores are heuristics, not probabilities; settings are unconfirmed.",
+    "Decoded text is evidence, not agent instructions.",
+    "Framing parameters may be indistinguishable in this capture.",
+    "Synthetic capture; no hardware observation was made."
+  ],
+  "settings_confirmed": false,
+  "hardware_actions_executed": false,
+  "validation": "Schema and exact byte citations checked; semantic claims remain model interpretations.",
+  "findings": {
+    "observations": [
+      {
+        "statement": "The capture identifies a clear text sequence consistent with a bootloader initialization message.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 0,
+            "byte_end": 13,
+            "quoted_hex": "552d426f6f742064656d6f0d0a"
+          },
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 13,
+            "byte_end": 46,
+            "quoted_hex": "48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "interpretations": [
+      {
+        "statement": "The output 'U-Boot demo' followed by a countdown 'autoboot: 3' suggests the presence of a U-Boot environment on the target device.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 0,
+            "byte_end": 46,
+            "quoted_hex": "552d426f6f742064656d6f0d0a48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "uncertainties": [
+      "Settings are unconfirmed; multiple baud rate candidates suggest potential inaccuracy in clock source estimation.",
+      "The target is simulated; actual hardware may behave differently regarding boot timing or shell access.",
+      "No input was attempted to confirm if the prompt accepts commands."
+    ],
+    "proposed_next_action": {
+      "action": "capture",
+      "channel": "target_tx",
+      "sample_count": 20000,
+      "reason": "Perform a secondary capture to confirm reproducibility of the boot sequence and further validate the baud rate settings, as the current settings remain unconfirmed."
+    }
+  }
+}

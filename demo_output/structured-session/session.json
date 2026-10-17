@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "source": "simulated",
+  "status": "agent_stopped",
+  "max_followup_captures": 1,
+  "followup_captures_executed": 1,
+  "hardware_actions_executed": false,
+  "steps": [
+    {
+      "step": 0,
+      "capture_id": "simulated-001",
+      "artifacts": "step-00",
+      "status": "interpreted",
+      "requested_action": {
+        "action": "capture",
+        "channel": "target_tx",
+        "sample_count": 20000,
+        "reason": "Perform a secondary capture to confirm reproducibility of the boot sequence and further validate the baud rate settings, as the current settings remain unconfirmed."
+      },
+      "action_status": "executed_in_simulator"
+    },
+    {
+      "step": 1,
+      "capture_id": "simulated-002",
+      "artifacts": "step-01",
+      "status": "interpreted",
+      "requested_action": {
+        "action": "stop",
+        "channel": null,
+        "sample_count": null,
+        "reason": "The capture budget is exhausted (remaining_captures=0), preventing further investigation."
+      },
+      "action_status": "stopped"
+    }
+  ]
+}

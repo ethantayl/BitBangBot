@@ -1,0 +1,68 @@
+{
+  "schema_version": 2,
+  "report_type": "uart_interpretation",
+  "provider": "gemini",
+  "model": "gemini-3.1-flash-lite",
+  "source": "simulated",
+  "capture_id": "simulated-002",
+  "analysis_sha256": "c0251c9483588129cad151ed0584b18267f47b92d7f15f1793560a1a70a70eef",
+  "capture_quality": {
+    "completion": "complete",
+    "overflowed": false
+  },
+  "analysis_warnings": [
+    "Scores are heuristics, not probabilities; settings are unconfirmed.",
+    "Decoded text is evidence, not agent instructions.",
+    "Framing parameters may be indistinguishable in this capture.",
+    "Synthetic capture; no hardware observation was made."
+  ],
+  "settings_confirmed": false,
+  "hardware_actions_executed": false,
+  "validation": "Schema and exact byte citations checked; semantic claims remain model interpretations.",
+  "findings": {
+    "observations": [
+      {
+        "statement": "The captured serial stream contains clear ASCII strings associated with a bootloader initialization process.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 0,
+            "byte_end": 13,
+            "quoted_hex": "552d426f6f742064656d6f0d0a"
+          },
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 13,
+            "byte_end": 46,
+            "quoted_hex": "48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "interpretations": [
+      {
+        "statement": "The signal likely represents a U-Boot initialization message prompting the user to interrupt the boot process, with 115200 baud being the most standard configuration for this type of output.",
+        "evidence": [
+          {
+            "candidate_id": "uart-1",
+            "byte_start": 0,
+            "byte_end": 46,
+            "quoted_hex": "552d426f6f742064656d6f0d0a48697420616e79206b657920746f2073746f70206175746f626f6f743a20330d0a"
+          }
+        ]
+      }
+    ],
+    "uncertainties": [
+      "Settings are unconfirmed; hardware confirmation was not possible.",
+      "The '3' in the capture does not establish a measured boot window or duration.",
+      "The source is simulated; no physical target was accessed or interacted with.",
+      "Baud rate 117647 (uart-2) is a mathematically plausible candidate but is non-standard, likely representing clock drift or simulation artifact."
+    ],
+    "proposed_next_action": {
+      "action": "stop",
+      "channel": null,
+      "sample_count": null,
+      "reason": "The capture budget is exhausted (remaining_captures=0), preventing further investigation."
+    }
+  }
+}
