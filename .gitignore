@@ -16,3 +16,6 @@ __pycache__/
 _tmp.tcl
 BitBangBot_soc
 .qsys_edit
+**/testbench/work/
+*.mpf
+*.wlf

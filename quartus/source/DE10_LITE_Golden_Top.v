@@ -132,10 +132,11 @@ module DE10_LITE_Golden_Top(
 		.clk_clk       (MAX10_CLK1_50),       //   clk.clk
 		.reset_reset_n (1'b1), // reset.reset_n
 		.sw_export     (SW),     //    sw.export
-		.uart_rxd      (GPIO[1]),      //  uart.rxd
-		.uart_txd      (GPIO[3])       //      .txd
+		//.uart_rxd      (GPIO[1]),      //  uart.rxd
+		.uart_uart_txd      (GPIO[3]),       //      .txd
+		.probe_probe ({16'h0000, GPIO[25:10]})
 	);
-
+	
 
 
 //=======================================================

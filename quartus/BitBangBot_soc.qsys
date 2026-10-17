@@ -17,6 +17,22 @@
          type = "int";
       }
    }
+   element logic_analyzer_0
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
+   element logic_analyzer_0.avalon_slave_0
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
    element master_0
    {
       datum _sortIndex
@@ -37,7 +53,7 @@
    {
       datum baseAddress
       {
-         value = "0";
+         value = "65536";
          type = "String";
       }
    }
@@ -53,7 +69,7 @@
    {
       datum baseAddress
       {
-         value = "4128";
+         value = "69632";
          type = "String";
       }
    }
@@ -69,7 +85,23 @@
    {
       datum baseAddress
       {
-         value = "4096";
+         value = "36864";
+         type = "String";
+      }
+   }
+   element uart_streamer_0
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
+   element uart_streamer_0.avalon_slave_0
+   {
+      datum baseAddress
+      {
+         value = "32768";
          type = "String";
       }
    }
@@ -95,22 +127,32 @@
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
+ <interface
+   name="probe"
+   internal="logic_analyzer_0.probe"
+   type="conduit"
+   dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
  <interface
    name="sw"
    internal="pio_0.external_connection"
    type="conduit"
    dir="end" />
- <interface
-   name="uart"
-   internal="uart_0.external_connection"
-   type="conduit"
-   dir="end" />
+ <interface name="uart" internal="uart_streamer_0.uart" type="conduit" dir="end" />
  <module name="clk_0" kind="clock_source" version="25.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
+ <module
+   name="logic_analyzer_0"
+   kind="logic_analyzer"
+   version="1.0"
+   enabled="1">
+  <parameter name="ABITS" value="13" />
+  <parameter name="BUF_WORDS" value="2048" />
+  <parameter name="WIDTH" value="32" />
  </module>
  <module
    name="master_0"
@@ -172,7 +214,7 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="10" />
  </module>
- <module name="uart_0" kind="altera_avalon_uart" version="25.1" enabled="1">
+ <module name="uart_0" kind="altera_avalon_uart" version="25.1" enabled="0">
   <parameter name="baud" value="115200" />
   <parameter name="clockRate" value="50000000" />
   <parameter name="dataBits" value="8" />
@@ -188,9 +230,33 @@
   <parameter name="useEopRegister" value="false" />
   <parameter name="useRelativePathForSimFile" value="false" />
  </module>
+ <module name="uart_streamer_0" kind="uart_streamer" version="1.0" enabled="1">
+  <parameter name="ABITS" value="13" />
+  <parameter name="BAUD" value="115200" />
+  <parameter name="BUF_BYTES" value="1024" />
+  <parameter name="CLK_FREQ" value="50000000" />
+ </module>
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="uart_streamer_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="logic_analyzer_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection kind="avalon" version="25.1" start="master_0.master" end="pio_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1020" />
+  <parameter name="baseAddress" value="0x00011000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -199,12 +265,12 @@
    start="master_0.master"
    end="onchip_memory2_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x00010000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="avalon" version="25.1" start="master_0.master" end="uart_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1000" />
+  <parameter name="baseAddress" value="0x9000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="clock" version="25.1" start="clk_0.clk" end="master_0.clk" />
@@ -216,6 +282,16 @@
    start="clk_0.clk"
    end="onchip_memory2_0.clk1" />
  <connection
+   kind="clock"
+   version="25.1"
+   start="clk_0.clk"
+   end="uart_streamer_0.clock" />
+ <connection
+   kind="clock"
+   version="25.1"
+   start="clk_0.clk"
+   end="logic_analyzer_0.clock" />
+ <connection
    kind="reset"
    version="25.1"
    start="clk_0.clk_reset"
@@ -225,7 +301,17 @@
    kind="reset"
    version="25.1"
    start="clk_0.clk_reset"
+   end="uart_streamer_0.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
    end="uart_0.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
+   end="logic_analyzer_0.reset" />
  <connection
    kind="reset"
    version="25.1"
