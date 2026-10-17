@@ -127,6 +127,12 @@ module DE10_LITE_Golden_Top(
 //  REG/WIRE declarations
 //=======================================================
 
+	BitBangBot_soc u0 (
+		.clk_clk       (MAX10_CLK1_50),       //   clk.clk
+		.reset_reset_n (1'b1), // reset.reset_n
+		.sw_export     (SW)      //    sw.export
+	);
+
 
 
 
