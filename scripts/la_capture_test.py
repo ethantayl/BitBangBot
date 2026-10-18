@@ -4,10 +4,11 @@ analyzer, and decode it back to the byte that was sent. Validates BOTH cores
 against each other.
 
 Wiring:
-  - Jumper: GPIO[3] (UART TX, header pin 4) --> GPIO[10] (probe ch0, header pin 13)
+  - Jumper: GPIO[3] (UART TX, header pin 4) --> GPIO[10] (probe ch8, header pin 13)
   - Nothing else needed (same board, shared ground).
 
-Probe mapping: probe = {16'h0000, GPIO[25:10]}, so GPIO[10] = probe channel 0.
+Probe mapping: probe = {8'h00, GPIO[25:10], GPIO[7:0]}, so GPIO[10] = probe
+channel 8 (and the mux pins GPIO[7:0] are channels 0-7).
 """
 from fpga_bench import FpgaBench
 import time
@@ -23,7 +24,7 @@ LA_DEPTH, LA_PRE_TRIG, LA_BUFFER = LA+0x18, LA+0x1C, LA+0x2000
 ST_CONTROL, ST_STATUS, ST_LENGTH, ST_BUFFER = \
     STREAMER+0x00, STREAMER+0x04, STREAMER+0x08, STREAMER+0x1000
 
-PROBE_CH  = 0
+PROBE_CH  = 8
 BAUD      = 115200
 CLK       = 50_000_000
 OVERSAMP  = 8                      # sample the UART 8x per bit
@@ -68,7 +69,7 @@ else:
 samples = fb.read_block(LA_BUFFER, DEPTH)
 line = [(s >> PROBE_CH) & 1 for s in samples]
 
-print("\ncaptured UART waveform (ch0):")
+print(f"\ncaptured UART waveform (ch{PROBE_CH}):")
 for r in range(0, len(line), 60):
     print("  " + "".join(str(b) for b in line[r:r+60]))
 

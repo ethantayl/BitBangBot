@@ -123,20 +123,69 @@ module DE10_LITE_Golden_Top(
 
 
 
+
 //=======================================================
 //  REG/WIRE declarations
 //=======================================================
 
+	// wires linking uart_full <-> pin_mux
+	wire uart_tx_sig;
+	wire uart_rx_sig;
+
+	// wires linking SPI IP <-> pin_mux
+	wire spi_sclk_sig;
+	wire spi_mosi_sig;
+	wire spi_cs_sig;
+	wire spi_miso_sig;
+
+	// wires linking I2C master <-> pin_mux
+	wire i2c_scl_oe, i2c_sda_oe;
+	wire i2c_scl_lvl, i2c_sda_lvl;
 
 	BitBangBot_soc u0 (
-		.clk_clk       (MAX10_CLK1_50),       //   clk.clk
-		.reset_reset_n (1'b1), // reset.reset_n
-		.sw_export     (SW),     //    sw.export
-		//.uart_rxd      (GPIO[1]),      //  uart.rxd
-		.uart_uart_txd      (GPIO[3]),       //      .txd
-		.probe_probe ({16'h0000, GPIO[25:10]})
+		.clk_clk             (MAX10_CLK1_50),                    //   clk.clk
+		.probe_probe         ({8'h00, GPIO[25:10], GPIO[7:0]}),  // probe.probe (ch0-7=mux pins)
+		.reset_reset_n       (1'b1),                             // reset.reset_n
+		.sw_export           (SW),                               //    sw.export
+
+		// uart_full <-> mux
+		.uart_uart_tx        (uart_tx_sig),
+		.uart_uart_rx        (uart_rx_sig),
+		.periph_uart_tx_in   (uart_tx_sig),
+		.periph_uart_rx_out  (uart_rx_sig),
+
+		// I2C master <-> mux (core oe=1 means pull the line low)
+		.i2c_scl_oe          (i2c_scl_oe),
+		.i2c_sda_oe          (i2c_sda_oe),
+		.i2c_scl_in          (i2c_scl_lvl),
+		.i2c_sda_in          (i2c_sda_lvl),
+		.periph_i2c_scl_in   (~i2c_scl_oe),    // -> mux drives SCL (open-drain)
+		.periph_i2c_sda_in   (~i2c_sda_oe),    // -> mux drives SDA (open-drain)
+		.periph_i2c_scl_out  (i2c_scl_lvl),    // <- SCL bus level
+		.periph_i2c_sda_out  (i2c_sda_lvl),    // <- SDA bus level
+
+		// SPI IP <-> mux
+		.spi_out_MOSI        (spi_mosi_sig),   // SPI IP MOSI out
+		.spi_out_SCLK        (spi_sclk_sig),   // SPI IP SCLK out
+		.spi_out_SS_n        (spi_cs_sig),     // SPI IP SS_n out
+		.spi_out_MISO        (spi_miso_sig),   // SPI IP MISO in
+		.periph_spi_mosi_in  (spi_mosi_sig),   // -> mux routes MOSI
+		.periph_spi_sclk_in  (spi_sclk_sig),   // -> mux routes SCLK
+		.periph_spi_cs_in    (spi_cs_sig),     // -> mux routes CS
+		.periph_spi_miso_out (spi_miso_sig),   // <- mux provides MISO
+
+		// seven-segment displays + red LEDs (board_io)
+		.board_hex0          (HEX0),
+		.board_hex1          (HEX1),
+		.board_hex2          (HEX2),
+		.board_hex3          (HEX3),
+		.board_hex4          (HEX4),
+		.board_hex5          (HEX5),
+		.board_ledr          (LEDR),
+
+		// mux physical pins -> GPIO[7:0]
+		.pins_pins           (GPIO[7:0])
 	);
-	
 
 
 //=======================================================
