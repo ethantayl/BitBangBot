@@ -9,6 +9,38 @@
    categories="System" />
  <parameter name="bonusData"><![CDATA[bonusData 
 {
+   element BitBangBot_soc
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element BitBangBot_soc
+   {
+      datum _originalDeviceFamily
+      {
+         value = "MAX 10";
+         type = "String";
+      }
+   }
+   element board_io_0
+   {
+      datum _sortIndex
+      {
+         value = "8";
+         type = "int";
+      }
+   }
+   element board_io_0.avalon_slave_0
+   {
+      datum baseAddress
+      {
+         value = "46192";
+         type = "String";
+      }
+   }
    element clk_0
    {
       datum _sortIndex
@@ -17,11 +49,27 @@
          type = "int";
       }
    }
+   element i2c_0
+   {
+      datum _sortIndex
+      {
+         value = "9";
+         type = "int";
+      }
+   }
+   element i2c_0.csr
+   {
+      datum baseAddress
+      {
+         value = "46080";
+         type = "String";
+      }
+   }
    element logic_analyzer_0
    {
       datum _sortIndex
       {
-         value = "6";
+         value = "4";
          type = "int";
       }
    }
@@ -53,7 +101,23 @@
    {
       datum baseAddress
       {
-         value = "65536";
+         value = "40960";
+         type = "String";
+      }
+   }
+   element pin_mux_0
+   {
+      datum _sortIndex
+      {
+         value = "6";
+         type = "int";
+      }
+   }
+   element pin_mux_0.avalon_slave_0
+   {
+      datum baseAddress
+      {
+         value = "45056";
          type = "String";
       }
    }
@@ -69,27 +133,27 @@
    {
       datum baseAddress
       {
-         value = "69632";
+         value = "46176";
          type = "String";
       }
    }
-   element uart_0
+   element spi_0
    {
       datum _sortIndex
       {
-         value = "4";
+         value = "7";
          type = "int";
       }
    }
-   element uart_0.s1
+   element spi_0.spi_control_port
    {
       datum baseAddress
       {
-         value = "36864";
+         value = "46144";
          type = "String";
       }
    }
-   element uart_streamer_0
+   element uart_full_0
    {
       datum _sortIndex
       {
@@ -97,7 +161,7 @@
          type = "int";
       }
    }
-   element uart_streamer_0.avalon_slave_0
+   element uart_full_0.avalon_slave_0
    {
       datum baseAddress
       {
@@ -126,24 +190,37 @@
  <parameter name="timeStamp" value="0" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
+ <interface name="board" internal="board_io_0.board" type="conduit" dir="end" />
  <interface name="clk" internal="clk_0.clk_in" type="clock" dir="end" />
+ <interface name="i2c" internal="i2c_0.i2c_serial" type="conduit" dir="end" />
+ <interface name="periph" internal="pin_mux_0.periph" type="conduit" dir="end" />
+ <interface name="pins" internal="pin_mux_0.pins" type="conduit" dir="end" />
  <interface
    name="probe"
    internal="logic_analyzer_0.probe"
    type="conduit"
    dir="end" />
  <interface name="reset" internal="clk_0.clk_in_reset" type="reset" dir="end" />
+ <interface name="spi_out" internal="spi_0.external" type="conduit" dir="end" />
  <interface
    name="sw"
    internal="pio_0.external_connection"
    type="conduit"
    dir="end" />
- <interface name="uart" internal="uart_streamer_0.uart" type="conduit" dir="end" />
+ <interface name="uart" internal="uart_full_0.uart" type="conduit" dir="end" />
+ <module name="board_io_0" kind="board_io" version="1.0" enabled="1">
+  <parameter name="ABITS" value="2" />
+ </module>
  <module name="clk_0" kind="clock_source" version="25.1" enabled="1">
   <parameter name="clockFrequency" value="50000000" />
   <parameter name="clockFrequencyKnown" value="true" />
   <parameter name="inputClockFrequency" value="0" />
   <parameter name="resetSynchronousEdges" value="NONE" />
+ </module>
+ <module name="i2c_0" kind="altera_avalon_i2c" version="25.1" enabled="1">
+  <parameter name="FIFO_DEPTH" value="16" />
+  <parameter name="USE_AV_ST" value="0" />
+  <parameter name="clockRate" value="50000000" />
  </module>
  <module
    name="logic_analyzer_0"
@@ -200,6 +277,10 @@
   <parameter name="useShallowMemBlocks" value="false" />
   <parameter name="writable" value="true" />
  </module>
+ <module name="pin_mux_0" kind="pin_mux" version="1.0" enabled="1">
+  <parameter name="ABITS" value="8" />
+  <parameter name="NPIN" value="8" />
+ </module>
  <module name="pio_0" kind="altera_avalon_pio" version="25.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
@@ -214,37 +295,28 @@
   <parameter name="simDrivenValue" value="0" />
   <parameter name="width" value="10" />
  </module>
- <module name="uart_0" kind="altera_avalon_uart" version="25.1" enabled="0">
-  <parameter name="baud" value="115200" />
-  <parameter name="clockRate" value="50000000" />
-  <parameter name="dataBits" value="8" />
-  <parameter name="fixedBaud" value="false" />
-  <parameter name="parity" value="NONE" />
-  <parameter name="simCharStream" value="" />
-  <parameter name="simInteractiveInputEnable" value="false" />
-  <parameter name="simInteractiveOutputEnable" value="false" />
-  <parameter name="simTrueBaud" value="false" />
-  <parameter name="stopBits" value="1" />
+ <module name="spi_0" kind="altera_avalon_spi" version="25.1" enabled="1">
+  <parameter name="avalonSpec" value="2.0" />
+  <parameter name="clockPhase" value="0" />
+  <parameter name="clockPolarity" value="0" />
+  <parameter name="dataWidth" value="8" />
+  <parameter name="disableAvalonFlowControl" value="false" />
+  <parameter name="inputClockRate" value="50000000" />
+  <parameter name="insertDelayBetweenSlaveSelectAndSClk" value="false" />
+  <parameter name="insertSync" value="false" />
+  <parameter name="lsbOrderedFirst" value="false" />
+  <parameter name="masterSPI" value="true" />
+  <parameter name="numberOfSlaves" value="1" />
   <parameter name="syncRegDepth" value="2" />
-  <parameter name="useCtsRts" value="false" />
-  <parameter name="useEopRegister" value="false" />
-  <parameter name="useRelativePathForSimFile" value="false" />
+  <parameter name="targetClockRate" value="1000000" />
+  <parameter name="targetSlaveSelectToSClkDelay" value="0.0" />
  </module>
- <module name="uart_streamer_0" kind="uart_streamer" version="1.0" enabled="1">
-  <parameter name="ABITS" value="13" />
+ <module name="uart_full_0" kind="uart_full" version="1.0" enabled="1">
+  <parameter name="ABITS" value="11" />
   <parameter name="BAUD" value="115200" />
-  <parameter name="BUF_BYTES" value="1024" />
+  <parameter name="BUF_LEN" value="256" />
   <parameter name="CLK_FREQ" value="50000000" />
  </module>
- <connection
-   kind="avalon"
-   version="25.1"
-   start="master_0.master"
-   end="uart_streamer_0.avalon_slave_0">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x8000" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
  <connection
    kind="avalon"
    version="25.1"
@@ -254,9 +326,41 @@
   <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="uart_full_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x8000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="pin_mux_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xb000" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="board_io_0.avalon_slave_0">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xb470" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection kind="avalon" version="25.1" start="master_0.master" end="i2c_0.csr">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0xb400" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
  <connection kind="avalon" version="25.1" start="master_0.master" end="pio_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011000" />
+  <parameter name="baseAddress" value="0xb460" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -265,17 +369,21 @@
    start="master_0.master"
    end="onchip_memory2_0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00010000" />
+  <parameter name="baseAddress" value="0xa000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
- <connection kind="avalon" version="25.1" start="master_0.master" end="uart_0.s1">
+ <connection
+   kind="avalon"
+   version="25.1"
+   start="master_0.master"
+   end="spi_0.spi_control_port">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x9000" />
+  <parameter name="baseAddress" value="0xb440" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="clock" version="25.1" start="clk_0.clk" end="master_0.clk" />
  <connection kind="clock" version="25.1" start="clk_0.clk" end="pio_0.clk" />
- <connection kind="clock" version="25.1" start="clk_0.clk" end="uart_0.clk" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="spi_0.clk" />
  <connection
    kind="clock"
    version="25.1"
@@ -285,12 +393,11 @@
    kind="clock"
    version="25.1"
    start="clk_0.clk"
-   end="uart_streamer_0.clock" />
- <connection
-   kind="clock"
-   version="25.1"
-   start="clk_0.clk"
    end="logic_analyzer_0.clock" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="uart_full_0.clock" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="pin_mux_0.clock" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="board_io_0.clock" />
+ <connection kind="clock" version="25.1" start="clk_0.clk" end="i2c_0.clock" />
  <connection
    kind="reset"
    version="25.1"
@@ -301,22 +408,33 @@
    kind="reset"
    version="25.1"
    start="clk_0.clk_reset"
-   end="uart_streamer_0.reset" />
- <connection
-   kind="reset"
-   version="25.1"
-   start="clk_0.clk_reset"
-   end="uart_0.reset" />
- <connection
-   kind="reset"
-   version="25.1"
-   start="clk_0.clk_reset"
    end="logic_analyzer_0.reset" />
  <connection
    kind="reset"
    version="25.1"
    start="clk_0.clk_reset"
+   end="uart_full_0.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
+   end="pin_mux_0.reset" />
+ <connection kind="reset" version="25.1" start="clk_0.clk_reset" end="spi_0.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
+   end="board_io_0.reset" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
    end="onchip_memory2_0.reset1" />
+ <connection
+   kind="reset"
+   version="25.1"
+   start="clk_0.clk_reset"
+   end="i2c_0.reset_sink" />
  <interconnectRequirement for="$system" name="qsys_mm.clockCrossingAdapter" value="HANDSHAKE" />
  <interconnectRequirement for="$system" name="qsys_mm.enableEccProtection" value="FALSE" />
  <interconnectRequirement for="$system" name="qsys_mm.insertDefaultSlave" value="FALSE" />

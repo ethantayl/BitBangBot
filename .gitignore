@@ -26,3 +26,5 @@ BitBangBot_soc
 **/testbench/work/
 *.mpf
 *.wlf
+*.log
+*.mti
